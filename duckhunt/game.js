@@ -7,7 +7,8 @@ function draw(){
 
 	var img = new Image();
   	img.onload = function(){
-  		ctx.drawImage(img,0,0);
+  		ctx.drawImage(img,0,270,80,130,20,120,240,390);
+  		ctx.drawImage(img,100,700,800,200,0,400,800,200);
   	};
 	img.src = 'assets/duckhunt.png';
 }
