@@ -12,3 +12,5 @@ Finished at around 5:51 so it took maybe 45 minutes to an hour of actually worki
 Used the image loading method described in "https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Canvas_tutorial/Using_images". I might switch over to using the <img> tag method as it would probably be more efficient later on. 
 
 As of now all required elements have been drawn. 
+
+Last minute update: Re-drew sky. 

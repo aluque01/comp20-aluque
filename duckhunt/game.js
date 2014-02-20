@@ -5,6 +5,8 @@ function draw(){
 
 	var img = new Image();
   	img.onload = function(){
+      ctx.fillStyle = "#87CEEB"; 
+      ctx.fillRect(0,0,800,600); //sky 
   		ctx.drawImage(img,0,270,80,130,20,120,240,390);  //tree
   		ctx.drawImage(img,100,700,800,200,0,400,800,200); //grass and dirt
   		ctx.drawImage(img,0,0,60,45,40,460,160,120); //dog
@@ -16,5 +18,6 @@ function draw(){
   	};
 	img.src = 'assets/duckhunt.png';
 }
+
 
 
