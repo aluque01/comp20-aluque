@@ -1,0 +1,14 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300);
+
+.cards{
+	width: 300px; 
+	height: 130px; 
+	padding: 10px;
+	padding-left: 30px;  
+	border-radius: 15px; 
+	border-top-left-radius: 0px; 
+	background-color: rgb(240,214,183);  
+	border-top: 10px solid rgb(195,22,27); 
+	font-family: 'Roboto Slab', serif;
+	font-weight: 300; 
+}
