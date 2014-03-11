@@ -352,13 +352,15 @@ String.prototype.capitalize = function() {
 }
 
 function indexOfSmallest(array){
-	var min = array[0]; 
+	console.log("HELLO!"); 
+
+	/*var min = array[0]; 
 	var minIndex = 0; 
 
 	console.log(min); 
 	console.log(array);
 	console.log(minIndex); 
-	
+
 	for (i = 1; i < array.length; i++){
 		if (array[i] < min){
 			minIndex = i; 
@@ -366,7 +368,7 @@ function indexOfSmallest(array){
 		}
 	}
 
-	return minIndex; 
+	return minIndex; */
 }
 
 
