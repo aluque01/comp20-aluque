@@ -35,8 +35,8 @@ function locate(){
 		navigator.geolocation.getCurrentPosition(function(position){
 			Lat = position.coords.latitude; 
 			Lng = position.coords.longitude; 
-			window.myLocation = [Lat, Lng]; 
-			console.log(myLocation); 
+			console.log(Lat); 
+			console.log(Lng); 
 		});
 	} else {
 		alert("Looks like the NSA can't find you."); 
