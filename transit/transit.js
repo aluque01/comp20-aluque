@@ -52,11 +52,11 @@ function findClosestStation(line){
 
 	var distanceFromStations = []; 
 	for (i = 0; i < line.length; i++){
-		var range = distnace(line[i]["Lat"], line[i]["Lng"]); 
+		var range = distance(line[i]["Lat"], line[i]["Lng"]); 
 		distanceFromStations.push(range); 
 	}
 
-	console.log(distnace); 
+	console.log(distanceFromStations); 
 }
 
 function myLocation(){
