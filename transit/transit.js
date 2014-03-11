@@ -40,6 +40,16 @@ function locate(){
 	}
 }
 
+function myLocation(){
+	var currentLocation = new google.maps.LatLng(myLat, myLng); 
+
+	var myMarker = new google.maps.Marker({
+		position: currentLocation, 
+		map: map, 
+		title: "I am here!"
+	});
+}
+
 //gets information about lines 
 function init(){
 	xhr = new XMLHttpRequest();
