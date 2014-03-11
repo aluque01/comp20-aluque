@@ -46,13 +46,11 @@ table{
 }
 
 #invisible{
-	width: 200px; 
-	height: 200px;
 	z-index: 10;
 	position: absolute;; 
 	top: 0;
 	left: 0;  
-	background-color: white; 
+	color: black; 
 	font-size: 20px; 
 }
 
