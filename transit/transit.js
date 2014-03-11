@@ -305,7 +305,7 @@ Number.prototype.toRad = function() {
 function distance(lat2, lon2){
 
 	var lat1 = myLat; 
-	var lon2 = myLng;
+	var lon1 = myLng;
 
 	var R = 6371; // km 
 	var x1 = lat2-lat1;
