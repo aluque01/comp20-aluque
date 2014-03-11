@@ -28,9 +28,6 @@ function start(){
 
 //This thing finds you 
 function locate(){
-
-	console.log("Hello!"); 
-
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position){
 			Lat = position.coords.latitude; 
