@@ -34,6 +34,7 @@ function locate(){
 			window.myLng = position.coords.longitude; 
 			console.log(myLat); 
 			console.log(myLng); 
+			myLocation(); 
 		});
 	} else {
 		alert("Looks like the NSA can't find you."); 
