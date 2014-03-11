@@ -61,6 +61,8 @@ function findClosestStation(line){
 
 	var minIndex = indexOfSmallest(distanceFromStations); 
 
+	
+
 	console.log(minIndex); 
 
 
