@@ -66,6 +66,9 @@ function findClosestStation(line){
 	console.log(min);  
 	console.log(index); 
 
+	var headsUp = document.getElementById("invisible"); 
+	headsUp.innerHTML = "<p>Closest station: "+ line[index]["Station"] + "</br> Distance: " + min + " miles. </p>";
+
 
 
 }
