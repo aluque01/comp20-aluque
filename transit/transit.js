@@ -355,7 +355,7 @@ function indexOfSmallest(array){
 	var min = array[0]; 
 	var minIndex = 0; 
 
-	for (i = 1; 1 < array.length; i++){
+	for (i = 1; i < array.length; i++){
 		if (array[i] < min){
 			minIndex = i; 
 			min = array[i]; 
