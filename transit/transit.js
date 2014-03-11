@@ -58,6 +58,12 @@ function findClosestStation(line){
 	}
 
 	console.log(distanceFromStations); 
+
+	var minIndex = indexOfSmallest(distanceFromStations); 
+
+	console.log(minIndex); 
+
+
 }
 
 function myLocation(){
@@ -343,7 +349,19 @@ String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
+function indexOfSmallest(array){
+	var min = array[0]; 
+	var minIndex = 0; 
 
+	for (i = 1; 1 < array.length; i++){
+		if (array[i] < min){
+			minIndex = i; 
+			min = array[i]; 
+		}
+	}
+
+	return minIndex; 
+}
 
 
 
