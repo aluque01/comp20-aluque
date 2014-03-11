@@ -48,12 +48,12 @@ table{
 #invisible{
 	width: 200px; 
 	height: 200px;
-	position: absolute;
-	z-index: 20; 
+	z-index: 10;
+	position: absolute;; 
+	top: 0;
+	left: 0;  
 	background-color: white; 
 	font-size: 20px; 
-	top: 10px; 
-	left: 10px; 
 }
 
 
