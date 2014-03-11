@@ -30,10 +30,10 @@ function start(){
 function locate(){
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position){
-			Lat = position.coords.latitude; 
-			Lng = position.coords.longitude; 
-			console.log(Lat); 
-			console.log(Lng); 
+			window.myLat = position.coords.latitude; 
+			window.myLng = position.coords.longitude; 
+			console.log(myLat); 
+			console.log(myLng); 
 		});
 	} else {
 		alert("Looks like the NSA can't find you."); 
