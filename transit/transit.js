@@ -51,9 +51,6 @@ function init(){
 function dataReady(){
 	if (xhr.readyState == 4 && xhr.status == 200){
 		window.stationData = JSON.parse(xhr.responseText);
-
-
-
 		if (stationData["line"] == "orange"){
 			drawStations(orange); 
 			drawOrangeLine(); 
@@ -65,7 +62,7 @@ function dataReady(){
 			drawRedLine(); 
 		}
 
-		getInformation("Bowdoin"); 
+		locate(); 
 	} else if (xhr.readyState == 4 && xhr.status == 500) {
 		error();  
 	}
