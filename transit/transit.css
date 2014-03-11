@@ -2,6 +2,7 @@
 
 html{
 	height: 100%;  
+	font-family: 'Roboto', sans-serif; 
 }
 
 body{
@@ -24,7 +25,6 @@ body{
 }
 
 p{
-	font-family: 'Roboto', sans-serif; 
 	font-weight: 100; 
 	margin: auto; 
 	margin-top: 15%; 
@@ -37,7 +37,12 @@ p{
 }
 
 table{  
-	border-spacing: 10px; 
+	border-spacing: 15px; 
+	font-size: 14px; 
+}
+
+#title{
+	font-size: 22px; 
 }
 
 

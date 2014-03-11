@@ -160,7 +160,8 @@ function getInformation(stop){
 	}
 
 	var enclosure = document.createElement("div"); 
-	enclosure.innerHTML = stop; 
+	enclosure.id = "title"; 
+	enclosure.innerHTML = stop;  
 	var displayData = document.createElement("table"); 
 	displayData.innerHTML = '<tr> <td>Line</td> <td>TripID</td> <td>Direction</td> <td>Time Remaining</td> </tr>';
 	for (i = 0; i < sortedMatches.length; i++){
@@ -169,7 +170,7 @@ function getInformation(stop){
 
 		var toAdd = document.createElement("tr"); 
 
-		toAdd.innerHTML = '<td>'+stationData["line"]+'</td>'+'<td>'+sortedMatches[i]["TripID"]+'</td>'+'<td>'+sortedMatches[i]["Destination"]+'</td>'+'<td>'+seconds+'</td>';
+		toAdd.innerHTML = '<td>'+stationData["line"].capitalize()+'</td>'+'<td>'+sortedMatches[i]["TripID"]+'</td>'+'<td>'+sortedMatches[i]["Destination"]+'</td>'+'<td>'+seconds+'</td>';
 
 		displayData.appendChild(toAdd); 
 	}
@@ -282,6 +283,9 @@ function ConvertTime(Seconds) {
     return time;
 }
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
 
 
 
