@@ -59,11 +59,9 @@ function findClosestStation(line){
 
 	console.log(distanceFromStations); 
 
-	var minIndex = indexOfSmallest(distanceFromStations); 
+	console.log(Math.min.apply(Math, distanceFromStations));  
 
-	
 
-	console.log(minIndex); 
 
 
 }
@@ -349,26 +347,6 @@ function ConvertTime(Seconds) {
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
-}
-
-function indexOfSmallest(array){
-	console.log("HELLO!"); 
-
-	/*var min = array[0]; 
-	var minIndex = 0; 
-
-	console.log(min); 
-	console.log(array);
-	console.log(minIndex); 
-
-	for (i = 1; i < array.length; i++){
-		if (array[i] < min){
-			minIndex = i; 
-			min = array[i]; 
-		}
-	}
-
-	return minIndex; */
 }
 
 
