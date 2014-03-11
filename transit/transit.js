@@ -1,3 +1,9 @@
+window.orangeOrder = ["Oak Grove", "Malden Center", "Wellington", "Sullivan Square", "Community College", "North", "Haymarket", "State" ,"Downtown Crossing", "Chinatown", "Tufts Medical Center","Back Bay","Massachusetts Avenue","Ruggles","Roxbury Crossing","Jackson Square","Stony Brook","Green Street","Forest Hills"]; 
+window.redOrderOne = ["Alewife","Davis","Porter Square","Harvard Square","Central Square","Kendall/MIT","Charles/MGH","Park Street","Downtown Crossing","South","Broadway","Andrew","JFK/UMass","North Quincy","Wollaston","Quincy Center","Quincy Adams","Braintree"];
+window.redOrderTwo = ["JFK/UMass", "Savin Hill","Fields Corner","Shawmut","Ashmont"];
+window.blueOrder = ["Wonderland","Revere Beach","Beachmont","Suffolk Downs","Orient Heights","Wood Island","Airport","Maverick","Aquarium","State Street","Government Center","Bowdoin"]; 
+
+
 var Lat = 42.361326; 
 var Lng = -71.084822;
 
@@ -18,7 +24,6 @@ function start(){
 
 	map = new google.maps.Map(document.getElementById("map-canvas"), 
 		mapOptions) 
-
 }
 
 //This thing finds you 
@@ -47,12 +52,17 @@ function dataReady(){
 	if (xhr.readyState == 4 && xhr.status == 200){
 		window.stationData = JSON.parse(xhr.responseText);
 
+
+
 		if (stationData["line"] == "orange"){
 			drawStations(orange); 
+			drawOrangeLine(); 
 		} else if (stationData["line"] == "blue"){
-			drawStations(blue); 
+			drawStations(blue);
+			drawBlueLine();  
 		} else if (stationData["line"] == "red"){
 			drawStations(red); 
+			drawRedLine(); 
 		}
 
 		getInformation("Bowdoin"); 
@@ -168,6 +178,92 @@ function getInformation(stop){
 	return enclosure; 
 
 }
+
+//draws poly line for blue line
+function drawBlueLine(){
+	var pathInfo = []; 
+	for (i = 0; i < blueOrder.length; i++){
+		for (k = 0; k < blue.length; k++){
+			if ( blue[k]["Station"] == blueOrder[i]){ 
+				pathInfo.push(new google.maps.LatLng(blue[k]["Lat"], blue[k]["Lng"])); 
+				pathInfo[pathInfo.length -1]["Station"] = blue[k]["Station"]; 
+			}
+		}
+	}
+
+	var finalPath = new google.maps.Polyline({
+		path: pathInfo, 
+		geodesic: true, 
+		strokeColor: '#1E4CD6', 
+		strokeOpacity: 1.0, 
+		strokeWeight: 2,
+		map: map
+	});
+}
+
+//draws poly line for orange line 
+function drawOrangeLine(){
+
+	var pathInfo = []; 
+	for (i = 0; i < orangeOrder.length; i++){
+		for (k = 0; k < orange.length; k++){
+			if ( orange[k]["Station"] == orangeOrder[i]){ 
+				pathInfo.push(new google.maps.LatLng(orange[k]["Lat"], orange[k]["Lng"])); 
+				pathInfo[pathInfo.length -1]["Station"] = orange[k]["Station"]; 
+			}
+		}
+	}
+
+	var finalPath = new google.maps.Polyline({
+		path: pathInfo, 
+		geodesic: true, 
+		strokeColor: '#D9A004', 
+		strokeOpacity: 1.0, 
+		strokeWeight: 4,
+		map: map
+	});
+
+
+}
+
+//draws ply line for red lie
+function drawRedLine(){
+	var pathOne = []; 
+	var pathTwo = []; 
+	for( i = 0; i < redOrderOne.length; i++){
+		for (k = 0; k < red.length; k++){
+			if(red[k]["Station"] == redOrderOne[i]){
+				pathOne.push( new google.maps.LatLng(red[k]["Lat"], red[k]["Lng"])); 
+				pathOne[pathOne.length-1]["Station"] = red[k]["Station"]; 
+			}
+		}
+	}
+	for (i = 0; i < redOrderTwo.length; i++){
+		for (k = 0; k < red.length; k++){
+			if(red[k]["Station"] == redOrderTwo[i]){
+				pathTwo.push( new google.maps.LatLng(red[k]["Lat"], red[k]["Lng"])); 
+				pathTwo[pathTwo.length-1]["Station"] = red[k]["Station"]; 
+			}
+		}
+	}
+	var firstLine = new google.maps.Polyline({
+		path: pathOne,
+		geodesic: true,
+		strokeColor: '#BA1A1A',
+		strokeOpacity: 1.0,
+		strokeWeight: 2,
+		map: map
+	});
+	var secondLine = new google.maps.Polyline({
+		path: pathTwo,
+		geodesic: true,
+		strokeColor: '#BA1A1A',
+		strokeOpacity: 1.0,
+		strokeWeight: 2,
+		map: map
+	});
+}
+
 
 function sortNumber(a, b){
 	return a - b; 
