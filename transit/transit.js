@@ -52,7 +52,8 @@ function findClosestStation(line){
 
 	var distanceFromStations = []; 
 	for (i = 0; i < line.length; i++){
-		var range = distance(line[i]["Lat"], line[i]["Lng"]); 
+		var range = distance(line[i]["Lat"], line[i]["Lng"]);
+		var range = Math.round(range*100)/100;  
 		distanceFromStations.push(range); 
 	}
 
