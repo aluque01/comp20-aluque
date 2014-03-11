@@ -31,14 +31,32 @@ function locate(){
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position){
 			window.myLat = position.coords.latitude; 
-			window.myLng = position.coords.longitude; 
-			console.log(myLat); 
-			console.log(myLng); 
+			window.myLng = position.coords.longitude;  
 			myLocation(); 
+
+		if (stationData["line"] == "orange"){
+			findClosestStation(orange); 
+		} else if (stationData["line"] == "blue"){
+			findClosestStation(blue); 
+		} else if (stationData["line"] == "red"){
+			findClosestStation(red); 
+		}
+
 		});
 	} else {
 		alert("Looks like the NSA can't find you."); 
 	}
+}
+
+function findClosestStation(line){
+
+	var distanceFromStations = []; 
+	for (i = 0; i < line.length; i++){
+		var range = distnace(line[i]["Lat"], line[i]["Lng"]); 
+		distanceFromStations.push(range); 
+	}
+
+	console.log(distnace); 
 }
 
 function myLocation(){
@@ -47,8 +65,11 @@ function myLocation(){
 	var myMarker = new google.maps.Marker({
 		position: currentLocation, 
 		map: map, 
-		title: "I am here!"
+		title: "I am here!",
+		icon: 'me.png' 
 	});
+
+	map.panTo(currentLocation); 
 }
 
 //gets information about lines 
@@ -273,6 +294,32 @@ function drawRedLine(){
 	});
 }
 
+
+
+
+
+Number.prototype.toRad = function() {
+   return this * Math.PI / 180;
+}
+
+function distance(lat2, lon2){
+
+	var lat1 = myLat; 
+	var lon2 = myLng;
+
+	var R = 6371; // km 
+	var x1 = lat2-lat1;
+	var dLat = x1.toRad();  
+	var x2 = lon2-lon1;
+	var dLon = x2.toRad();  
+	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+                Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                Math.sin(dLon/2) * Math.sin(dLon/2);  
+	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	var d = R * c;
+
+	return d; 
+}
 
 function sortNumber(a, b){
 	return a - b; 
