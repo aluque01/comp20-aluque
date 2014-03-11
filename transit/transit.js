@@ -1,19 +1,13 @@
-var Lat = 42.4183; 
-var Lng = -71.066124;
+var Lat = 42.361326; 
+var Lng = -71.084822;
 
-
-var xhr; 
-var stationData; 
-var red; 
-var orange;
-var blue; 
 
 //this sets up the google map 
 function start(){
 
 	stationData(); 
 
-	//init(); //gets schedule data 
+	init(); //gets schedule data 
 
 	var location = new google.maps.LatLng(Lat, Lng);
 
@@ -24,11 +18,6 @@ function start(){
 
 	map = new google.maps.Map(document.getElementById("map-canvas"), 
 		mapOptions) 
-
-	
-	drawStations(blue); 
-	drawStations(orange); 
-	drawStations(red);  
 
 }
 
@@ -57,7 +46,16 @@ function init(){
 function dataReady(){
 	if (xhr.readyState == 4 && xhr.status == 200){
 		window.stationData = JSON.parse(xhr.responseText);
-		console.log(stationData); 
+
+		if (stationData["line"] == "orange"){
+			drawStations(orange); 
+		} else if (stationData["line"] == "blue"){
+			drawStations(blue); 
+		} else if (stationData["line"] == "red"){
+			drawStations(red); 
+		}
+
+		getInformation("Bowdoin"); 
 	} else if (xhr.readyState == 4 && xhr.status == 500) {
 		error();  
 	}
@@ -82,13 +80,15 @@ function stationData(){
 
 
 function drawStations(line){
-	var infoWindowContent = []; 
+	var infoWindowContent = [];
+	var pathInfo = []; 
+
 	for (i = 0; i < line.length; i++){
 		infoWindowContent.push(line[i]["Station"]); 
 	}
 
 	var infowindow = new google.maps.InfoWindow({
-      maxWidth: 160
+      maxWidth: 800
     });
 
     if(line[0]["Line"] == "Red"){
@@ -112,11 +112,78 @@ function drawStations(line){
 
 		google.maps.event.addListener(marker, 'click', (function(marker, i) {
         	return function() {
-          	infowindow.setContent(infoWindowContent[i]);
+          	infowindow.setContent(getInformation(line[i]["Station"]));
           	infowindow.open(map, marker);
         	}
       	})(marker, i));
 	}
+}
+
+function getInformation(stop){
+	var schedule = stationData["schedule"]; 
+
+
+	var matches = []; 
+	for (i = 0; i < schedule.length; i++){
+		for (k = 0; k < schedule[i]["Predictions"].length; k++){
+			if(schedule[i]["Predictions"][k]["Stop"] == stop){
+				matches.push(schedule[i]["Predictions"][k]); 
+				matches[matches.length-1]["Destination"] = schedule[i]["Destination"]; 
+				matches[matches.length-1]["TripID"] = schedule[i]["TripID"]; 
+			}
+		}
+	}
+
+	var timeRemaining = []; 
+	for ( i = 0; i < matches.length; i++){
+		timeRemaining.push(matches[i]["Seconds"]); 
+	}
+	timeRemaining.sort(sortNumber);   
+
+	var sortedMatches = []; 
+	for (i = 0; i < matches.length; i++){
+		for (k = 0; k < matches.length; k++){
+			if(matches[k]["Seconds"] == timeRemaining[i]){
+				sortedMatches.push(matches[k]); 
+			}
+		}
+	}
+
+	var enclosure = document.createElement("div"); 
+	enclosure.innerHTML = stop; 
+	var displayData = document.createElement("table"); 
+	displayData.innerHTML = '<tr> <td>Line</td> <td>TripID</td> <td>Direction</td> <td>Time Remaining</td> </tr>';
+	for (i = 0; i < sortedMatches.length; i++){
+		seconds = sortedMatches[i]["Seconds"].toString(); 
+		seconds = ConvertTime(seconds); 
+
+		var toAdd = document.createElement("tr"); 
+
+		toAdd.innerHTML = '<td>'+stationData["line"]+'</td>'+'<td>'+sortedMatches[i]["TripID"]+'</td>'+'<td>'+sortedMatches[i]["Destination"]+'</td>'+'<td>'+seconds+'</td>';
+
+		displayData.appendChild(toAdd); 
+	}
+	enclosure.appendChild(displayData); 
+
+	return enclosure; 
+
+}
+
+function sortNumber(a, b){
+	return a - b; 
+}
+
+
+function ConvertTime(Seconds) {
+    var sec_num = parseInt(Seconds, 10); 
+    var hours = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+    if (hours < 10) { hours = "0" + hours; }
+    if (minutes < 10) { minutes = "0" + minutes; }
+    if (seconds < 10) { seconds = "0" + seconds; }
+    var time = hours + ':' + minutes + ':' + seconds;
+    return time;
 }
 
 
