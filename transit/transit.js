@@ -82,6 +82,8 @@ function findClosestStation(line){
 		map: map
 	});
 
+	document.getElementById("invisible").id = "visible"; 
+
 }
 
 function myLocation(){
