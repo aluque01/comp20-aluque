@@ -51,7 +51,7 @@ table{
 	position: absolute;
 	width: 360px;
 	height: 65px; 
-	z-index: 10;
+	z-index: 20;
 	top: 10px;
 	left: 36%; 
 	margin: auto;   
@@ -61,6 +61,7 @@ table{
 	opacity: .7;
 	font-weight: 300; 
 	border-radius: 10px; 
+	clear: both;
 }
 
 
