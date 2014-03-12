@@ -46,6 +46,7 @@ table{
 }
 
 #invisible{
+	position: absolute;
 	width: 800px;
 	height: 80px; 
 	z-index: 10;
