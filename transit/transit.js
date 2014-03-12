@@ -57,15 +57,9 @@ function findClosestStation(line){
 		distanceFromStations.push(range); 
 	}
 
-	console.log(distanceFromStations); 
-
 	var min = Math.min.apply(Math, distanceFromStations);  
-
 	var index = distanceFromStations.indexOf(min);
-
-	console.log(min);  
-	console.log(index); 
-
+	
 	document.getElementById("invisible").innerHTML = "Closest station is "+ line[index]["Station"] + " </br> " + min + " miles away.";
 
 	var walkingPath = [
