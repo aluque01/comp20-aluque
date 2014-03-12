@@ -66,7 +66,7 @@ function findClosestStation(line){
 	console.log(min);  
 	console.log(index); 
 
-	document.getElementById("invisible").innerHTML = "Closest station is "+ line[index]["Station"] + ", " + min + " miles away.";
+	document.getElementById("invisible").innerHTML = "Closest station is "+ line[index]["Station"] + " </br> " + min + " miles away.";
 
 	var walkingPath = [
 		new google.maps.LatLng(myLat, myLng), 
