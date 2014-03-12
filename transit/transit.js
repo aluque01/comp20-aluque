@@ -68,7 +68,19 @@ function findClosestStation(line){
 
 	document.getElementById("invisible").innerHTML = "Closest station is "+ line[index]["Station"] + ", " + min + " miles away.";
 
+	var walkingPath = [
+		new google.maps.LatLng(myLat, myLng), 
+		new google.maps.LatLng(line[index]["Lat"], line[index]["Lng"])
+	];
 
+	var path = new google.maps.Polyline({
+		path: walkingPath,
+		geodesic: true, 
+		strokeColor: "#000000",
+		strokeOpacity: 0.7,
+		strokeWeight: 3, 
+		map: map
+	});
 
 }
 
