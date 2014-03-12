@@ -52,8 +52,8 @@ table{
 	width: 360px;
 	height: 65px; 
 	z-index: 20;
-	top: 10px;
-	left: 36%; 
+	bottom: 10px; 
+	left: 10px; 
 	margin: auto;   
 	color: white;
 	background-color: black;  
