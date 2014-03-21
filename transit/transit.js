@@ -125,7 +125,7 @@ function error(){
 	var overlay = document.createElement("div");
 	overlay.setAttribute("id","overlay");
 	overlay.innerHTML = "<p>Oops! </br> MBTA data was lost in translation! </br> Please reload the page! </p>"
-	document.body.appendChild(overlay);
+	document.body.appendChild(overlay); 
 }
 
 function stationData(){
