@@ -7,20 +7,34 @@
 <title>Fecesbook</title>
 
 <script type="text/javascript">
+
+function init(){
+	if(!localStorage.feed){
+		localStorage.setItem("feed", ""); 
+	}
+
+	document.getElementById("status").innerHTML = localStorage.feed; 
+}
+
 function updateFeed(){
+
 	var msg = document.getElementById("msg").value; 
 	date = new Date(); 
 	var update = ((date.getMonth()+1)+"/"+(date.getDate())+"/"+(date.getFullYear())+" "+(date.getHours())+":"+(date.getMinutes())+" - "+msg); 
-	var feed = document.createElement('p'); 
-	feed.innerHTML = update; 
-	var box = document.getElementById("status"); 
-	box.insertBefore(feed, box.firstChild); 
+	var feed = "<p> "+update+" </p>"; 
+
+	var temp = localStorage.feed; 
+	feed += temp; 
+	localStorage.feed = feed; 
+
+	document.getElementById("status").innerHTML = localStorage.feed; 
+
 	document.getElementById("msg").value = "";
 }
 </script>
 </head>
 
-<body>
+<body onload="init()">
 	<h1>Fecebook</h1>
 	<div id="nav">
 		<ul>
