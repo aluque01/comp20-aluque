@@ -1,0 +1,80 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>2048 Security Assesment</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<h1>2048 Game Center </br> Security Assesment</h1>
+
+	<h2>Introduction</h2>
+	<p>This is the security assessment for the 2048 Game Center application created by Liat  Litwin. The 2048 Game Center application is a database for high scores from the popular 2048 game, which contains the user’s name, their score, and when they achieved that score. The database also contains grid information for the final grid, but the user never sees that. The client provides a modified version of the 2048 game that sends the information to their data. Anyone that plays the modified version will have their scores maintained by the 2048 Game Center database. </p>
+	<p>As of now, the application just takes in data and spits it back out. This is a huge vulnerability that can be abused by the general public once they have their hands on the modified version of the game. Users would be free to inject invalid or modified data, invalid or manipulated high scores, and even malicious script. This assessment will focus mainly on the problem with submitting and retrieving user scores from the modified version of the game. </p>
+
+	<h2>Methodology</h2>
+	<p>The first test was done using the “black-box” method. Using the API submitted by the developer, you can see two methods, a POST and GET method to submit scores, and to retrieve scores from a certain user. These two API calls are vulnerable to attack by using a simple curl command to inject java script and JSON data. The way the GET call was handled also left sensitive data out in the open. The Second method was using the “white-box” method, which involved me going over the source code and trying to find vulnerabilities there. This lead me to see the code was more secure than previously thought. </p>
+
+	<h2>Abstract of Findings</h2>
+	<p>The securities holes in this project all come from having an API that does not check for user input. Too much trust is being put into the input anyone can give, leaving an open and extremely easy way of attacking the site. Then there was also the gaping hole with the API for requesting scores, which would give the entire user document instead of just the scores. However, the developer did check for some form of valid input into the database, meaning any part of the request did not conform to the structure of the database, it would not be put in. This saved it from crashing and database attacks. </p>
+
+	<h2>Findings</h2>
+	<ol>
+		<li><h3>/scores.json User Retrieval <br></h3>
+			<ul>
+				<li><p>This affects the GET scores API.</br></p></li>
+				<li><p>Issue: Bad programming practice and database security issue. The GET API is suppose to retrieve the cores for that user alone. However, querying for a certain user will present the client will the full document of that user. Not only their scores, for whatever other information has been saved to the database for that user. </br></p></li>
+				<li><p>Severity: High.  For now the security risk is not very high. But In the future it could be. As of now it just displays the user’s grid and object id. However, if passwords were added in the future, it could be a huge exploit as it would show the password to anyone who knew the person’s username. </br></p></li>
+				<li><p>I found the issue by just doing what the request API is suppose to do. This was an issue with the way the code was written.</br></p><img  id='picture1' src="Picture1.png"></li>
+				<li><p>Resolution: The developer used the POST to array function to add JSON data to a viewable array. Individually adding in the data on just the user, score, and date in the exact way the developer added the scores to the home page would fix the issue. This requires rewriting the code. </br> Something along the lines of: (this is using mongoose, could be transferred over to MongoLabs)</br><code></br>User.find({ username: request.query}, function (err, object) { </br>
+					&nbsp;&nbsp;&nbsp;&nbsp;if(err) { </br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res.send(err); </br>
+					&nbsp;&nbsp;&nbsp;&nbsp;} else if (!object){ </br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res.send("No object exists!") </br>
+					&nbsp;&nbsp;&nbsp;&nbsp;} else { </br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res.render('MyExpressPageHere', { </br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: "Scores for User" + request.query, </br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;obj: obj["score"]  </br>
+					&nbsp;&nbsp;&nbsp;&nbsp;}) </br>
+					&nbsp;&nbsp;} </br>
+					&nbsp;}); </br>
+				</code></br>This could fix the issue by using express and node itself, meaning only the scores will be sent to the page, which could be created by the developer, instead of sending the entire array. </p></li>
+			</ul>	
+		</li>
+		<li><h3>Post submit scores API</h3>
+			<ul>
+				<li><p>This affects the POST scores API</br></p></li>
+				<li><p>Issue: The submit scores API does not check to see what kind of data is being submitted into the database. This allows for injection of html/javascript and invalid data into the developers database. This allows people to falsify scores, or post other things to the database that will ruin the experience for other users (Like injection loldogs.com into the database and having the song come up every time someone wants to check scores.). </br></p></li>
+				<li><p>Location: /submit.json </br></p></li>
+				<li><p>Severity: High. Someone could easily take control of the high score page by just continually injecting html data into the scoreboard, effectively making the website something completely different. This could lead to malicious attacks on other users, as well as invalidating all data. Once user’s see that someone could easily cheat the high score system or make the website unusable, they might move on to other options. </br></p></li>
+				<li><p>This attack could easily be replicated using a curl command.</br><br>You could either curl in invalid data with incredibly high scores:</br></br><code>curl -X POST -H "Content-Type: application/json" –d '{"userame":"potato","score":"99999999999","grid":"grid"}' http://localhost:3000/submit.json</code></br></br>Or with injecting other websites/html content into the page:</br></br><code>curl -X POST -H "Content-Type: application/json" -d '{"username":"iframe src='http://www.nyan.cat/'iframe","score":"243","grid":"grid"}' http://localhost:3000/submit.json</code></br></br></p><img id='picture2' src="Picture3.png"><img id='picture3' src="Picture2.png"></li>
+				<li><p>This issue for injecting html could be resolved by either escaping all tag characters, or rejecting all data with html tags. To combat illegal scores, there could be a limit set on the range of the score. Say each score should be higher than zero but lower than the max score on 2048. This would reduce exorbitant scores but not combat fake ones completely, it’s still better than having a score show up as 1+e^111. </br></br> The client could use: </br></br> <code>&nbsp;&nbsp;&nbsp;&nbsp;if (request.body.score < 0 or request.body.score is > max2048Score) {</br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response.send(“Invalid score submission!”); </br>
+				&nbsp;&nbsp;&nbsp;&nbsp;} </code></br></br>For injecting html or scripts, it would probably be best to reject all data containing the tag character and make it invalid for use in usernames. It could be something like this: </br></br><code>&nbsp;&nbsp;&nbsp;&nbsp;If ( (request.body.score.indexOf(‘<’) ===  -1) && (request.body.username.indexOf(‘<’) === -1)  && (request.body.username.indexOf(‘<’) === -1 ) { </br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Continue as normal; </br>
+				&nbsp;&nbsp;&nbsp;&nbsp;} else {</br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response.send(“Stop trying to break my program!”); </br>
+				&nbsp;&nbsp;&nbsp;&nbsp;}</code> </br></br>The previous could be done to match up against an array of invalid characters or strings. </br></br> This method of attack the server will only work if the user inputs it to the name field, as the score field uses parseInt method, which will always return an integer or not a number.  </p></li>
+			</ul>
+		</li>
+		<li>
+			<h3>Cross Origin Resource Sharing</h3>
+			<ul>
+				<li><p>The client enable cross origin content sharing using the ‘*’ wildcard option. This means that everyone and anyone can submit data to the database. This leads to many issues. One of the huge issues is the ability to shut down the entire server by just submitting JSON and filling up the database to its limit. As soon as the limit is filled, the server will shut down and the application will not longer work. </br></p></li>
+				<li><p>Location: /submit.json </br></p></li>
+				<li><p>Severity: High. This can easily shut down the entire server. It’s easy for an attacker to write a script that will continuously submit requests to the server. Anyone could put an ajax POST function into a loop and have it continuously submit data until the database is full. Or even easier, anyone could just keep submitting curl requests until the database is full, crashing the application. </br></p></li>
+				<li><p>This issue stems from the use of cross origin resource sharing within the application. The developer used this to allow for anyone who has a modified version to submit their scores. However, this opens up the application to attack from all sources as well. This would normally not be found, but going through the source code shows the use of the wildcard option when allowing cross origin sharing, which is the main problem. </br></br><img id='picture4' src="Picture4.png"></p></li>
+				<li><p>There are two possible solutions to this problem. One is to restrict cross origin resource sharing to only a few trusted sites or somehow make sure the same site doesn’t submit too many requests at once. </br></p></li>
+			</ul>
+		</li>
+		<li>
+			<h3>The developer protected the app against ivalid JSON dataand invalid JSON fields</h3>
+			<ul>
+				<li><p>Normally funneling invalid data would crash server or cause the site to break. However, the developer has made sure that if any of the fields are null or undefined, then the data won’t be pushed. This means that you can’t insert extra fields, or have an invalid field name that will crash the database or the web application. </br></br> For retrieving data, the same rule applies. The developer has coded it in a way that if the query is undefined data, then an empty array is displayed. This means that an attacker cannot ask for arbitrary requests from the database and overload it. </br></br> Since the developer checked for nonexistent data, I was not able to do a direct attack on the database with my current knowledge. However, I was still able to inject the database with malicious code and html that would be sent back to the end user. </p></li>
+			</ul>
+		</li>
+	</ol>
+	<h2>Conclusion</h2>
+	<p>The sight was only slightly more secure than expected. While checking for valid JSON data and converting to strings did make a lot of forms of attack invalid, some still remained. The developer did not check the validity of the data being submitted at all, so no scores on the game could actually be trusted. Not checking the validity of the data also lead to a second problem. Anyone could submit html and JavaScript code into the “username” field of the chart, basically slowing anyone with enough time to take over the complete page. Finally, there was the huge security issue when querying for a user’s scores that would send back the entire database object to anyone requesting the scores. This means that whatever information is on there (including passwords) would be sent back in plain text to anyone requesting scores. </br></br>My recommendation would be to check for valid input, this would greatly reduce the likelihood of someone injecting data into the database. Also, removing cross origin sharing and having a list of trusted developers would disable most DNS attacks. Finally, making sure the database queries only for the scores would fix the issue of having all data displayed in plain text. </p>			
+</body>
+</html>
